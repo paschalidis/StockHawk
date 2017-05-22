@@ -1,10 +1,10 @@
 package com.udacity.stockhawk.ui;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -31,7 +31,8 @@ import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>,
         SwipeRefreshLayout.OnRefreshListener,
-        StockAdapter.StockAdapterOnClickHandler {
+        StockAdapter.StockAdapterOnClickHandler,
+        SharedPreferences.OnSharedPreferenceChangeListener{
 
     private static final int STOCK_LOADER = 0;
     @SuppressWarnings("WeakerAccess")
@@ -87,15 +88,29 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     @Override
+    protected void onResume() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        sp.registerOnSharedPreferenceChangeListener(this);
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        sp.registerOnSharedPreferenceChangeListener(this);
+        super.onPause();
+    }
+
+    @Override
     public void onRefresh() {
 
         QuoteSyncJob.syncImmediately(this);
 
-        if (!Utility.isNetworkAvailable(getApplicationContext()) && adapter.getItemCount() == 0) {
+        if (!Utility.isNetworkAvailable(this) && adapter.getItemCount() == 0) {
             swipeRefreshLayout.setRefreshing(false);
             error.setText(getString(R.string.error_no_network));
             error.setVisibility(View.VISIBLE);
-        } else if (!Utility.isNetworkAvailable(getApplicationContext())) {
+        } else if (!Utility.isNetworkAvailable(this)) {
             swipeRefreshLayout.setRefreshing(false);
             Toast.makeText(this, R.string.toast_no_connectivity, Toast.LENGTH_LONG).show();
         } else if (PrefUtils.getStocks(this).size() == 0) {
@@ -104,6 +119,22 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             error.setVisibility(View.VISIBLE);
         } else {
             error.setVisibility(View.GONE);
+        }
+    }
+
+    private void showErrorMessage(){
+        @QuoteSyncJob.ServerStatus int serverStatus = Utility.getServerStatus(this);
+        switch (serverStatus){
+            case QuoteSyncJob.SERVER_STATUS_DOWN:
+                //Show error for server down
+                swipeRefreshLayout.setRefreshing(false);
+                Toast.makeText(this, R.string.toast_stock_down, Toast.LENGTH_LONG).show();
+                break;
+            case QuoteSyncJob.SERVER_STATUS_INVALID:
+                //Show error for invalid
+                swipeRefreshLayout.setRefreshing(false);
+                Toast.makeText(this, R.string.toast_stock_invalid, Toast.LENGTH_LONG).show();
+                break;
         }
     }
 
@@ -180,5 +211,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if(key.equals(getString(R.string.pref_server_status_key))){
+            showErrorMessage();
+        }
     }
 }

@@ -102,8 +102,8 @@ public final class QuoteSyncJob {
                 StockQuote quote = stock.getQuote();
 
                 if(stock.getName() == null){
-                    PrefUtils.removeStock(context, symbol);
                     setServerStatus(context, SERVER_STATUS_INVALID);
+                    PrefUtils.removeStock(context, symbol);
                     return;
                 }
                 float price = quote.getPrice().floatValue();

@@ -1,8 +1,12 @@
 package com.udacity.stockhawk;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.preference.PreferenceManager;
+
+import com.udacity.stockhawk.sync.QuoteSyncJob;
 
 
 public class Utility {
@@ -25,5 +29,18 @@ public class Utility {
         }
 
         return isAvailable;
+    }
+
+    /**
+     *
+     * @param c Context used to get the SharedPreferences
+     * @return the server status integer type
+     */
+    @SuppressWarnings("ResourceType")
+    static public @QuoteSyncJob.ServerStatus
+    int getServerStatus(Context c){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
+        return sp.getInt(c.getString(R.string.pref_server_status_key),
+                QuoteSyncJob.SERVER_STATUS_UNKNOWN);
     }
 }
