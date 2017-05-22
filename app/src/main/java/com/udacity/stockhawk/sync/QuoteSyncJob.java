@@ -6,14 +6,19 @@ import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.preference.PreferenceManager;
 import android.support.annotation.IntDef;
 import android.util.Log;
 
+import com.udacity.stockhawk.R;
+import com.udacity.stockhawk.Utility;
 import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.data.PrefUtils;
 import com.udacity.stockhawk.mock.MockUtils;
+import com.udacity.stockhawk.ui.MainActivity;
 
 import java.io.IOException;
 import java.lang.annotation.Retention;
@@ -96,6 +101,11 @@ public final class QuoteSyncJob {
                 Stock stock = quotes.get(symbol);
                 StockQuote quote = stock.getQuote();
 
+                if(stock.getName() == null){
+                    PrefUtils.removeStock(context, symbol);
+                    setServerStatus(context, SERVER_STATUS_INVALID);
+                    return;
+                }
                 float price = quote.getPrice().floatValue();
                 float change = quote.getChange().floatValue();
                 float percentChange = quote.getChangeInPercent().floatValue();
@@ -141,11 +151,14 @@ public final class QuoteSyncJob {
             Intent dataUpdatedIntent = new Intent(ACTION_DATA_UPDATED);
             context.sendBroadcast(dataUpdatedIntent);
 
+            setServerStatus(context, SERVER_STATUS_OK);
         } catch (IOException exception) {
             Timber.e(exception, "Error fetching stock quotes");
+            setServerStatus(context, SERVER_STATUS_DOWN);
         } catch (NullPointerException nullPointerException) {
             Log.e(LOG_TAG, nullPointerException.getMessage());
             Timber.e(nullPointerException, "Invalid Stock");
+            setServerStatus(context, SERVER_STATUS_INVALID);
         }
     }
 
@@ -176,10 +189,7 @@ public final class QuoteSyncJob {
 
     public static synchronized void syncImmediately(Context context) {
 
-        ConnectivityManager cm =
-                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
+        if (Utility.isNetworkAvailable(context)) {
             Intent nowIntent = new Intent(context, QuoteIntentService.class);
             context.startService(nowIntent);
         } else {
@@ -197,6 +207,20 @@ public final class QuoteSyncJob {
 
 
         }
+    }
+
+    /**
+     * Sets the server status into shared preference. This function should not
+     * be called from the UI thread it uses commit to write to the shared preferences.
+     *
+     * @param c Context to get the PreferenceManager from.
+     * @param serverStatus The IntDef Status to set
+     */
+    static private void setServerStatus(Context c, @ServerStatus int serverStatus){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
+        SharedPreferences.Editor spe = sp.edit();
+        spe.putInt(c.getString(R.string.pref_server_status_key), serverStatus);
+        spe.commit();
     }
 
 

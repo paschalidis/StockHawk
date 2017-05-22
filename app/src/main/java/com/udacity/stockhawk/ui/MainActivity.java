@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.udacity.stockhawk.R;
+import com.udacity.stockhawk.Utility;
 import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.data.PrefUtils;
 import com.udacity.stockhawk.sync.QuoteSyncJob;
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @BindView(R.id.error)
     TextView error;
     private StockAdapter adapter;
+    private Context mContext;
 
     @Override
     public void onClick(String symbol) {
@@ -84,23 +86,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     }
 
-    private boolean networkUp() {
-        ConnectivityManager cm =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-        return networkInfo != null && networkInfo.isConnectedOrConnecting();
-    }
-
     @Override
     public void onRefresh() {
 
         QuoteSyncJob.syncImmediately(this);
 
-        if (!networkUp() && adapter.getItemCount() == 0) {
+        if (!Utility.isNetworkAvailable(getApplicationContext()) && adapter.getItemCount() == 0) {
             swipeRefreshLayout.setRefreshing(false);
             error.setText(getString(R.string.error_no_network));
             error.setVisibility(View.VISIBLE);
-        } else if (!networkUp()) {
+        } else if (!Utility.isNetworkAvailable(getApplicationContext())) {
             swipeRefreshLayout.setRefreshing(false);
             Toast.makeText(this, R.string.toast_no_connectivity, Toast.LENGTH_LONG).show();
         } else if (PrefUtils.getStocks(this).size() == 0) {
@@ -119,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     void addStock(String symbol) {
         if (symbol != null && !symbol.isEmpty()) {
 
-            if (networkUp()) {
+            if (Utility.isNetworkAvailable(getApplicationContext())) {
                 swipeRefreshLayout.setRefreshing(true);
             } else {
                 String message = getString(R.string.toast_stock_added_no_connectivity, symbol);
