@@ -26,6 +26,10 @@
             android:name=".ui.DetailActivity"
             android:label="@string/detail_name" />
 
+        <activity
+            android:name=".ui.HistoryActivity"
+            android:label="@string/history_label" />
+
         <service
             android:name=".sync.QuoteIntentService"
             android:exported="false" />

@@ -3,6 +3,8 @@
 
     <string name="detail_name">Stock Detail</string>
 
+    <string name="history_label">History Data</string>
+
     <string name="pref_stocks_initialized_key" translatable="false">initialized</string>
 
     <string name="pref_stocks_key" translatable="false">stocks</string>
