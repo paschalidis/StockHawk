@@ -8,12 +8,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.annotation.IntDef;
+import android.util.Log;
 
 import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.data.PrefUtils;
 import com.udacity.stockhawk.mock.MockUtils;
 
 import java.io.IOException;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
@@ -31,12 +35,28 @@ import yahoofinance.quotes.stock.StockQuote;
 
 public final class QuoteSyncJob {
 
+    private static final String LOG_TAG = QuoteSyncJob.class.getSimpleName();
+
     private static final int ONE_OFF_ID = 2;
     private static final String ACTION_DATA_UPDATED = "com.udacity.stockhawk.ACTION_DATA_UPDATED";
     private static final int PERIOD = 300000;
     private static final int INITIAL_BACKOFF = 10000;
     private static final int PERIODIC_ID = 1;
     private static final int YEARS_OF_HISTORY = 2;
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({SERVER_STATUS_OK,
+            SERVER_STATUS_DOWN,
+            SERVER_STATUS_INVALID,
+            SERVER_STATUS_UNKNOWN})
+
+    public @interface ServerStatus {
+    }
+
+    public static final int SERVER_STATUS_OK = 0;
+    public static final int SERVER_STATUS_DOWN = 1;
+    public static final int SERVER_STATUS_INVALID = 2;
+    public static final int SERVER_STATUS_UNKNOWN = 3;
 
     private QuoteSyncJob() {
     }
@@ -123,6 +143,9 @@ public final class QuoteSyncJob {
 
         } catch (IOException exception) {
             Timber.e(exception, "Error fetching stock quotes");
+        } catch (NullPointerException nullPointerException) {
+            Log.e(LOG_TAG, nullPointerException.getMessage());
+            Timber.e(nullPointerException, "Invalid Stock");
         }
     }
 
