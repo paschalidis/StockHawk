@@ -3,11 +3,11 @@
 
     <string name="pref_stocks_initialized_key" translatable="false">initialized</string>
 
-    <string name="pref_stocks_key">stocks</string>
-    <string name="pref_server_status_key">pref-server-status</string>
+    <string name="pref_stocks_key" translatable="false">stocks</string>
+    <string name="pref_server_status_key" translatable="false">pref-server-status</string>
 
 
-    <string name="pref_display_mode_key">displayMode</string>
+    <string name="pref_display_mode_key" translatable="false">displayMode</string>
     <string name="pref_display_mode_default">@string/pref_display_mode_percentage_key</string>
 
     <string name="pref_display_mode_absolute_key">absolute</string>
