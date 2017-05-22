@@ -40,7 +40,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:gravity="center"
         android:textAppearance="@android:style/TextAppearance.Medium"
         android:visibility="gone"
-        tools:text="Error message" />
+        tools:text="@string/error_no_network" />
 </merge>
