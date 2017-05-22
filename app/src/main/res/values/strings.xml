@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Stock Hawk</string>
 
+    <string name="detail_name">Stock Detail</string>
+
     <string name="pref_stocks_initialized_key" translatable="false">initialized</string>
 
     <string name="pref_stocks_key" translatable="false">stocks</string>
