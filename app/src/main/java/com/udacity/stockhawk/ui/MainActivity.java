@@ -135,6 +135,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 swipeRefreshLayout.setRefreshing(false);
                 Toast.makeText(this, R.string.toast_stock_invalid, Toast.LENGTH_LONG).show();
                 break;
+            case QuoteSyncJob.SERVER_STATUS_VALUE_INVALID:
+                swipeRefreshLayout.setRefreshing(false);
+                Toast.makeText(this, R.string.toast_value_invalid, Toast.LENGTH_LONG).show();
+                break;
         }
     }
 
@@ -152,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 Toast.makeText(this, message, Toast.LENGTH_LONG).show();
             }
 
+            Utility.resetServerStatus(this);
             PrefUtils.addStock(this, symbol);
             QuoteSyncJob.syncImmediately(this);
         }

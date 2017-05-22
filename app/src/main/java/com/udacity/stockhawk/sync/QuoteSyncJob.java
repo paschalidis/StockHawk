@@ -53,7 +53,9 @@ public final class QuoteSyncJob {
     @IntDef({SERVER_STATUS_OK,
             SERVER_STATUS_DOWN,
             SERVER_STATUS_INVALID,
-            SERVER_STATUS_UNKNOWN})
+            SERVER_STATUS_UNKNOWN,
+            SERVER_STATUS_VALUE_INVALID
+    })
 
     public @interface ServerStatus {
     }
@@ -62,6 +64,7 @@ public final class QuoteSyncJob {
     public static final int SERVER_STATUS_DOWN = 1;
     public static final int SERVER_STATUS_INVALID = 2;
     public static final int SERVER_STATUS_UNKNOWN = 3;
+    public static final int SERVER_STATUS_VALUE_INVALID = 4;
 
     private QuoteSyncJob() {
     }
@@ -102,7 +105,7 @@ public final class QuoteSyncJob {
                 StockQuote quote = stock.getQuote();
 
                 if(stock.getName() == null){
-                    setServerStatus(context, SERVER_STATUS_INVALID);
+                    setServerStatus(context, SERVER_STATUS_VALUE_INVALID);
                     PrefUtils.removeStock(context, symbol);
                     return;
                 }

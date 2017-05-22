@@ -43,4 +43,15 @@ public class Utility {
         return sp.getInt(c.getString(R.string.pref_server_status_key),
                 QuoteSyncJob.SERVER_STATUS_UNKNOWN);
     }
+
+    /**
+     * Resets the server status.  (Sets it to QuoteSyncJob.LOCATION_STATUS_UNKNOWN)
+     * @param c Context used to get the SharedPreferences
+     */
+    static public void resetServerStatus(Context c){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
+        SharedPreferences.Editor spe = sp.edit();
+        spe.putInt(c.getString(R.string.pref_server_status_key), QuoteSyncJob.SERVER_STATUS_UNKNOWN);
+        spe.apply();
+    }
 }
