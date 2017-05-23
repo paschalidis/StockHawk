@@ -26,7 +26,7 @@
         <activity
             android:name=".ui.HistoryActivity"
             android:label="@string/history_label"
-            android:parentActivityName=".ui.MainActivity"/>
+            android:parentActivityName=".ui.MainActivity" />
 
         <service
             android:name=".sync.QuoteIntentService"
@@ -43,13 +43,6 @@
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
-        <receiver android:name=".widget.StockWidgetProvider" >
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-            <meta-data android:name="android.appwidget.provider"
-                android:resource="@xml/simple_widget_info" />
-        </receiver>
     </application>
 
 </manifest>
