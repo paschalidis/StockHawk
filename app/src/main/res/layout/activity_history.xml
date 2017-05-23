@@ -31,5 +31,15 @@
 
     </LinearLayout>
 
+    <com.db.chart.view.LineChartView
+        android:id="@+id/lcv_history_data"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/padding_extra_medium"
+        android:paddingEnd="@dimen/padding_extra_medium"
+        android:paddingLeft="@dimen/padding_extra_medium"
+        android:paddingRight="@dimen/padding_extra_medium"
+        android:paddingStart="@dimen/padding_extra_medium"
+        android:paddingTop="@dimen/padding_extra_medium" />
 
 </LinearLayout>
