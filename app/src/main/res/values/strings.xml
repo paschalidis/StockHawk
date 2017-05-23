@@ -42,5 +42,6 @@
     <string name="toast_value_invalid">Stock in not available.</string>
     
     <string name="add_stock_label">Add Stock</string>
+    <string name="error_no_history_data">No History Data For This Stock</string>
 
 </resources>
