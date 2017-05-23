@@ -42,4 +42,6 @@
     <string name="add_stock_label">Add Stock</string>
     <string name="error_no_history_data">No History Data For This Stock</string>
 
+    <string name="widget_cd">Description</string>
+
 </resources>
