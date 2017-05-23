@@ -1,6 +1,8 @@
 package com.udacity.stockhawk.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
@@ -20,6 +22,10 @@ public class HistoryActivity extends AppCompatActivity {
     @BindView(R.id.tc_stock_price)
     TextView mStockPrice;
 
+    public final static String STOCK_SYMBOL = "stock_symbol";
+    public final static String STOCK_PRICE = "stock_price";
+    public final static String STOCK_HISTORY = "stock_history";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +33,15 @@ public class HistoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_history);
         ButterKnife.bind(this);
 
-        mStockLabel.setText("Yahoo");
-        mStockPrice.setText("$65.000");
+        Intent intent = getIntent();
+        if(intent != null){
+            if(intent.hasExtra(STOCK_SYMBOL)){
+                mStockLabel.setText(intent.getStringExtra(STOCK_SYMBOL));
+            }
+            if(intent.hasExtra(STOCK_PRICE)){
+                mStockPrice.setText(intent.getStringExtra(STOCK_PRICE));
+            }
+        }
+
     }
 }
