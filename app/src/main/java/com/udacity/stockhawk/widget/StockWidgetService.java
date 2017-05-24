@@ -11,16 +11,30 @@ import com.udacity.stockhawk.R;
 import com.udacity.stockhawk.data.Contract.Quote;
 import com.udacity.stockhawk.ui.HistoryActivity;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Locale;
+
 public class StockWidgetService extends RemoteViewsService {
+
+    private final DecimalFormat dollarFormat;
+    private final DecimalFormat dollarFormatWithPlus;
+
+    public StockWidgetService(){
+        dollarFormat = (DecimalFormat) NumberFormat.getCurrencyInstance(Locale.US);
+        dollarFormatWithPlus = (DecimalFormat) NumberFormat.getCurrencyInstance(Locale.US);
+        dollarFormatWithPlus.setPositivePrefix("+$");
+    }
+
     @Override
     public RemoteViewsFactory onGetViewFactory(final Intent intent) {
         return new RemoteViewsFactory() {
 
             private Cursor data = null;
 
+
             @Override
             public void onCreate() {
-
             }
 
             @Override
@@ -68,16 +82,26 @@ public class StockWidgetService extends RemoteViewsService {
                         R.layout.list_item_quote);
 
                 // Get stock data from cursor
-                int stockId = data.getInt(Quote.POSITION_ID);
                 String symbol = data.getString(Quote.POSITION_SYMBOL);
-                String price = data.getString(Quote.POSITION_PRICE);
-                String change = data.getString(Quote.POSITION_ABSOLUTE_CHANGE);
+                float priceFloat = data.getFloat(Quote.POSITION_PRICE);
+                float absoluteChange = data.getFloat(Quote.POSITION_ABSOLUTE_CHANGE);
                 String history = data.getString(Quote.POSITION_HISTORY);
+
+                // Format Values
+                String change = dollarFormatWithPlus.format(absoluteChange);
+                String price = dollarFormat.format(priceFloat);
 
                 // Set stock data to view
                 views.setTextViewText(R.id.symbol, symbol);
                 views.setTextViewText(R.id.price, price);
                 views.setTextViewText(R.id.change, change);
+
+                // Set Background to change view
+                if(absoluteChange > 0){
+                    views.setInt(R.id.change, "setBackgroundResource", R.drawable.percent_change_pill_green);
+                } else {
+                    views.setInt(R.id.change, "setBackgroundResource", R.drawable.percent_change_pill_red);
+                }
 
                 // Create Intent to history activity
                 final Intent intentHistory = new Intent();
