@@ -18,6 +18,8 @@
     <dimen name="margin_extra_large">32sp</dimen>
 
     <!-- Stock Widget -->
-    <dimen name="widget_stock_default_width">40dp</dimen>
-    <dimen name="widget_stock_default_height">40dp</dimen>
+    <dimen name="widget_stock_default_width">250dp</dimen>
+    <dimen name="widget_stock_default_height">180dp</dimen>
+    <dimen name="widget_stock_min_resize_width">220dp</dimen>
+    <dimen name="widget_stock_min_resize_height">@dimen/widget_stock_default_height</dimen>
 </resources>
