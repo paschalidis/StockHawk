@@ -10,10 +10,10 @@
 
 
     <string name="pref_display_mode_key" translatable="false">displayMode</string>
-    <string name="pref_display_mode_default">@string/pref_display_mode_percentage_key</string>
+    <string name="pref_display_mode_default" translatable="false">@string/pref_display_mode_percentage_key</string>
 
-    <string name="pref_display_mode_absolute_key">absolute</string>
-    <string name="pref_display_mode_percentage_key">percentage</string>
+    <string name="pref_display_mode_absolute_key" translatable="false">absolute</string>
+    <string name="pref_display_mode_percentage_key" translatable="false">percentage</string>
 
     <string name="default_stocks_yahoo">YHOO</string>
     <string name="default_stocks_apple">AAPL</string>
@@ -21,7 +21,7 @@
     <string name="default_stocks_facebook">FB</string>
 
 
-    <string name="action_change_units">@string/pref_display_mode_key</string>
+    <string name="action_change_units" translatable="false">@string/pref_display_mode_key</string>
 
 
     <string name="dialog_title">Add Stock</string>
@@ -38,10 +38,8 @@
     <string name="toast_stock_invalid">Server is not returning data. Please check for an updated version of Stock Hawk</string>
     <string name="toast_stock_down">Server is not returning data.</string>
     <string name="toast_value_invalid">Stock in not available.</string>
-    
+
     <string name="add_stock_label">Add Stock</string>
     <string name="error_no_history_data">No History Data For This Stock</string>
-
-    <string name="widget_cd">Description</string>
 
 </resources>
