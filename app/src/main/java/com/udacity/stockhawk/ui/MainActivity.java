@@ -1,6 +1,7 @@
 package com.udacity.stockhawk.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -45,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @BindView(R.id.error)
     TextView error;
     private StockAdapter adapter;
-    private Context mContext;
 
     @Override
     public void onClick(String symbol) {
@@ -81,6 +81,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 String symbol = adapter.getSymbolAtPosition(viewHolder.getAdapterPosition());
                 PrefUtils.removeStock(MainActivity.this, symbol);
                 getContentResolver().delete(Contract.Quote.makeUriForStock(symbol), null, null);
+                Intent dataUpdated = new Intent(QuoteSyncJob.ACTION_DATA_UPDATED);
+                getApplicationContext().sendBroadcast(dataUpdated);
             }
         }).attachToRecyclerView(stockRecyclerView);
 
