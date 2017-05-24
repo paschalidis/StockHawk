@@ -1,49 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/chart_color_fill"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/tv_widget_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:padding="@dimen/padding_medium"
+        android:text="@string/app_name"
+        android:textAppearance="?android:textAppearanceLarge" />
+
+    <ListView
+        android:id="@+id/lv_widget_stock"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/chart_color_fill"
-        android:orientation="vertical">
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        tools:listitem="@layout/list_item_quote" />
 
-        <TextView
-            android:id="@+id/tv_widget_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:text="@string/app_name"
-            android:padding="@dimen/padding_medium"
-            android:textAppearance="?android:textAppearanceLarge" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:background="@color/chart_color_fill"
-            android:padding="@dimen/padding_medium">
-
-            <TextView
-                android:id="@+id/tv_widget_stock_symbol"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="start|center_vertical"
-                android:textAllCaps="true"
-                tools:text="GOOG" />
-
-            <TextView
-                android:id="@+id/tv_widget_stock_price"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10sp"
-                tools:text="1000.00" />
-
-        </LinearLayout>
-    </LinearLayout>
-</FrameLayout>
+</LinearLayout>
