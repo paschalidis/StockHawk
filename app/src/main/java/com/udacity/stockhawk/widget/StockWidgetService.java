@@ -9,10 +9,11 @@ import android.widget.RemoteViewsService;
 
 import com.udacity.stockhawk.R;
 import com.udacity.stockhawk.data.Contract.Quote;
+import com.udacity.stockhawk.ui.HistoryActivity;
 
 public class StockWidgetService extends RemoteViewsService {
     @Override
-    public RemoteViewsFactory onGetViewFactory(Intent intent) {
+    public RemoteViewsFactory onGetViewFactory(final Intent intent) {
         return new RemoteViewsFactory() {
 
             private Cursor data = null;
@@ -66,17 +67,25 @@ public class StockWidgetService extends RemoteViewsService {
                 RemoteViews views = new RemoteViews(getPackageName(),
                         R.layout.list_item_quote);
 
-                //Get stock data from cursor
+                // Get stock data from cursor
                 int stockId = data.getInt(Quote.POSITION_ID);
                 String symbol = data.getString(Quote.POSITION_SYMBOL);
                 String price = data.getString(Quote.POSITION_PRICE);
                 String change = data.getString(Quote.POSITION_ABSOLUTE_CHANGE);
                 String history = data.getString(Quote.POSITION_HISTORY);
 
-                //Set stock data to view
+                // Set stock data to view
                 views.setTextViewText(R.id.symbol, symbol);
                 views.setTextViewText(R.id.price, price);
                 views.setTextViewText(R.id.change, change);
+
+                // Create Intent to history activity
+                final Intent intentHistory = new Intent();
+                intentHistory.putExtra(HistoryActivity.STOCK_SYMBOL, symbol);
+                intentHistory.putExtra(HistoryActivity.STOCK_PRICE, price);
+                intentHistory.putExtra(HistoryActivity.STOCK_HISTORY, history);
+
+                views.setOnClickFillInIntent(R.id.stock, intentHistory);
 
                 return views;
             }

@@ -1,6 +1,7 @@
 package com.udacity.stockhawk.widget;
 
 import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
@@ -10,6 +11,7 @@ import android.widget.RemoteViews;
 
 import com.udacity.stockhawk.R;
 import com.udacity.stockhawk.sync.QuoteSyncJob;
+import com.udacity.stockhawk.ui.HistoryActivity;
 import com.udacity.stockhawk.ui.MainActivity;
 
 public class StockWidgetProvider extends AppWidgetProvider {
@@ -30,6 +32,15 @@ public class StockWidgetProvider extends AppWidgetProvider {
             // Set up the collection
             views.setRemoteAdapter(R.id.lv_widget_stock, new Intent(context, StockWidgetService.class));
 
+            // Create Intent For List Item
+            Intent clickIntentTemplate = new Intent(context, HistoryActivity.class);
+
+            PendingIntent clickPendingIntent = TaskStackBuilder.create(context)
+                    .addNextIntentWithParentStack(clickIntentTemplate)
+                    .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            views.setPendingIntentTemplate(R.id.lv_widget_stock, clickPendingIntent);
+
             //Tell the AppWidgetManager to perform an update on the current app widget
             appWidgetManager.updateAppWidget(appWidgetId, views);
         }
@@ -38,7 +49,7 @@ public class StockWidgetProvider extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-        if(QuoteSyncJob.ACTION_DATA_UPDATED.equals(intent.getAction())){
+        if (QuoteSyncJob.ACTION_DATA_UPDATED.equals(intent.getAction())) {
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
             int[] appWidgetIds = appWidgetManager.getAppWidgetIds(
                     new ComponentName(context, getClass())
