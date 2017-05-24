@@ -95,7 +95,6 @@ public class HistoryActivity extends AppCompatActivity {
         String[] rows = historyData.split(historyDataSeparator);
         Map<String, Float> values = new HashMap<>();
 
-
         for (int i = 0; i < HISTORY_DATA_QUANTITY; i++) {
             String[] row = rows[i].split(rowSeparator);
             values.put(row[timestampIndex], Float.parseFloat(row[priceIndex]));
@@ -143,13 +142,16 @@ public class HistoryActivity extends AppCompatActivity {
                 .setThickness(4)
                 .setDashed(new float[]{10f, 10f});
 
+        int xAxisMinValue = Math.round(Math.max(0f, minimumPrice - 5f));
+        int xAxisMaxValue = Math.round(maximumPrice + 5f);
+
         mLineChartView.setBorderSpacing(Tools.fromDpToPx(15))
                 .setYLabels(AxisController.LabelPosition.OUTSIDE)
                 .setXLabels(AxisController.LabelPosition.OUTSIDE)
                 .setLabelsColor(labelColor)
                 .setXAxis(true)
                 .setYAxis(true)
-                .setAxisBorderValues(Math.round(Math.max(0f, minimumPrice - 5f)), Math.round(maximumPrice + 5f))
+                .setAxisBorderValues(xAxisMinValue, xAxisMaxValue)
                 .addData(lineSet);
 
         Animation anim = new Animation();
